@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{% if subtask %}Edit{% else %}Add{% endif %} SubTask</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">{% if subtask %}Update{% else %}Create{% endif %}</button>
+    <a href="{% url 'subtask_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

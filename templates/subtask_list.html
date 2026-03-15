@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>SubTasks</h2>
+<a href="{% url 'subtask_create' %}" class="btn btn-primary mb-2">Add SubTask</a>
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>Parent Task</th>
+<th>Title</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+{% for subtask in subtasks %}
+<tr>
+<td>{{ subtask.parent_task.title }}</td>
+<td>{{ subtask.title }}</td>
+<td>{{ subtask.status }}</td>
+<td>
+<a href="{% url 'subtask_update' subtask.id %}" class="btn btn-sm btn-warning">Edit</a>
+<a href="{% url 'subtask_delete' subtask.id %}" class="btn btn-sm btn-danger">Delete</a>
+</td>
+</tr>
+{% empty %}
+<tr><td colspan="4">No subtasks found.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
