@@ -13,6 +13,8 @@ class DashboardView(TemplateView):
         context['total_tasks'] = Task.objects.count()
         context['pending_tasks'] = Task.objects.filter(status='Pending').count()
         context['completed_tasks'] = Task.objects.filter(status='Completed').count()
+        context['total_subtasks'] = SubTask.objects.count()
+        context['total_notes'] = Note.objects.count()
         return context
 
 # Task Views
@@ -35,7 +37,7 @@ class TaskUpdateView(UpdateView):
 
 class TaskDeleteView(DeleteView):
     model = Task
-    template_name = 'task_confirm_delete.html'
+    template_name = 'task_delete.html'
     success_url = reverse_lazy('task_list')
 
 # SubTask Views
@@ -58,7 +60,7 @@ class SubTaskUpdateView(UpdateView):
 
 class SubTaskDeleteView(DeleteView):
     model = SubTask
-    template_name = 'subtask_confirm_delete.html'
+    template_name = 'subtask_delete.html'
     success_url = reverse_lazy('subtask_list')
 
 # Category Views
@@ -81,7 +83,7 @@ class CategoryUpdateView(UpdateView):
 
 class CategoryDeleteView(DeleteView):
     model = Category
-    template_name = 'category_confirm_delete.html'
+    template_name = 'category_delete.html'
     success_url = reverse_lazy('category_list')
 
 # Priority Views
@@ -104,28 +106,28 @@ class PriorityUpdateView(UpdateView):
 
 class PriorityDeleteView(DeleteView):
     model = Priority
-    template_name = 'priority_confirm_delete.html'
+    template_name = 'priority_delete.html'
     success_url = reverse_lazy('priority_list')
 
 # Note Views
 class NoteListView(ListView):
     model = Note
-    template_name = 'note_list.html'
+    template_name = 'notes_list.html'
     context_object_name = 'notes'
 
 class NoteCreateView(CreateView):
     model = Note
     form_class = NoteForm
-    template_name = 'note_form.html'
+    template_name = 'notes_form.html'
     success_url = reverse_lazy('note_list')
 
 class NoteUpdateView(UpdateView):
     model = Note
     form_class = NoteForm
-    template_name = 'note_form.html'
+    template_name = 'notes_form.html'
     success_url = reverse_lazy('note_list')
 
 class NoteDeleteView(DeleteView):
     model = Note
-    template_name = 'note_confirm_delete.html'
+    template_name = 'notes_delete.html'
     success_url = reverse_lazy('note_list')
