@@ -9,7 +9,7 @@ Hangarin is a simple web application built with **Django** that helps users:
 
 It features a responsive **Bootstrap 5 dashboard** for tracking task status and quick management.
 
----
+
 
 ## Features
 
@@ -27,6 +27,6 @@ It features a responsive **Bootstrap 5 dashboard** for tracking task status and 
 - Admin interface for managing all objects
 - Search and filter for Tasks and SubTasks
 
----
+
 
 ## Project Structure
