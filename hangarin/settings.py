@@ -1,3 +1,8 @@
+
+
+
+
+
 """
 Django settings for hangarin project.
 
@@ -24,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-65$+tfy6#o^1!es5^szcf)ut3bnfc25%=sa%r9&zz@td#!-)_m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shx15.pythonanywhere.com']
 
 
 # Application definition
@@ -116,8 +121,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+ HEAD
 
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles'
+ 78c3ef8 (changes from pythonanywhere)
