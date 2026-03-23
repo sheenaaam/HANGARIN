@@ -2,54 +2,433 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Hangarin Dashboard</title>
 
-    <!-- Local Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'startbootstrap-sb-admin/dist/css/styles.css' %}">
-
-    <!-- Optional: Font Awesome for icons -->
+    <!-- Original CSS + SB Admin -->
+    <link href="{% static 'startbootstrap-sb-admin/dist/css/styles.css' %}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    
+    <style>
+        /* COMPLETE GLASSMORPHISM DESIGN */
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border: rgba(148, 163, 184, 0.3);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
 
+        body { 
+            font-family: 'Inter', sans-serif !important;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+        }
+
+        /* Navbar */
+        .sb-topnav {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3) !important;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700 !important;
+            font-size: 1.6rem !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+        }
+
+        /* FIXED SIDEBAR - DARK TEXT + SUBTASKS */
+        .sb-sidenav-dark {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) !important;
+            border-right: 1px solid var(--border) !important;
+        }
+
+        .sb-sidenav-dark *,
+        .sb-sidenav-dark .sb-sidenav-menu-heading,
+        .sb-sidenav-dark .nav-link,
+        .sb-sidenav-dark .nav-link span,
+        .sb-sidenav-dark .sb-sidenav-footer {
+            color: var(--text-primary) !important;
+        }
+
+        .sb-sidenav-dark .nav-link:hover {
+            background: rgba(139, 92, 246, 0.15) !important;
+            color: var(--primary) !important;
+        }
+
+        .sb-sidenav-dark .nav-link.active {
+            background: rgba(139, 92, 246, 0.25) !important;
+            color: var(--primary) !important;
+        }
+
+        /* SQUARE STAT CARDS */
+        .stat-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 20px !important;
+            height: 160px !important;
+            width: 100% !important;
+            transition: all 0.4s ease !important;
+            overflow: hidden !important;
+            position: relative !important;
+            color: var(--text-primary) !important;
+            box-shadow: var(--shadow) !important;
+        }
+
+        .stat-card .card-body {
+            padding: 1.5rem !important;
+            height: 100% !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .stat-card h3 {
+            color: var(--text-primary) !important;
+            font-weight: 700 !important;
+            font-size: 2.2rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+
+        .stat-card p {
+            color: var(--text-secondary) !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+        }
+
+        /* GRID LAYOUT */
+        .summary-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 1.5rem !important;
+            margin-bottom: 2.5rem !important;
+        }
+
+        @media (max-width: 1200px) {
+            .summary-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 768px) {
+            .summary-grid { grid-template-columns: 1fr !important; }
+        }
+
+        /* Enhanced Search & Profile */
+        .input-group input {
+            border-radius: 25px !important;
+            background: rgba(255,255,255,0.95) !important;
+            border: 2px solid rgba(255,255,255,0.3) !important;
+            padding: 0.75rem 1.5rem !important;
+        }
+
+        .input-group .btn {
+            border-radius: 25px !important;
+            background: white !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+        }
+
+        .dropdown-menu {
+            border-radius: 20px !important;
+            border: 1px solid var(--border) !important;
+            backdrop-filter: blur(20px) !important;
+            box-shadow: var(--shadow) !important;
+        }
+
+        /* Main Cards */
+        .glass-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 24px !important;
+            box-shadow: var(--shadow) !important;
+        }
+
+        /* Task Cards */
+        .task-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .task-item-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .task-item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+        }
+
+        .task-priority-badge {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .priority-high { background: #fee2e2; color: #dc2626; }
+        .priority-medium { background: #fef3c7; color: #d97706; }
+        .priority-low { background: #d1fae5; color: #059669; }
+
+        .status-pending { background: #fef3c7; color: #d97706; }
+        .status-completed { background: #d1fae5; color: #059669; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade { animation: fadeInUp 0.6s ease forwards; }
+    </style>
 </head>
 <body class="sb-nav-fixed">
-    <!-- Navbar -->
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand ps-3" href="{% url 'dashboard' %}">Hangarin: Task & To-Do Manager</a>
+    <!-- NAVBAR -->
+    <nav class="sb-topnav navbar navbar-expand navbar-dark">
+        <a class="navbar-brand ps-3" href="{% url 'dashboard' %}">
+            <i class="fas fa-tasks me-2"></i>Hangarin
+        </a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" method="get">
+            <div class="input-group input-group-sm">
+                <input class="form-control" type="text" placeholder="🔍 Search tasks..." 
+                       name="q" value="{{ request.GET.q|default:'' }}" />
+                <button class="btn btn-light px-3" type="submit"><i class="fas fa-search"></i></button>
+            </div>
+        </form>
+        
+        <ul class="navbar-nav ms-auto ms-md-0 me-3">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-user-circle fa-2x"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li class="dropdown-header fw-bold p-3">{{ user.username|default:"User" }}</li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'account_logout' %}">
+                        <i class="fas fa-sign-out-alt me-2 text-danger"></i>Logout
+                    </a></li>
+                </ul>
+            </li>
+        </ul>
     </nav>
 
+    <!-- SIDEBAR WITH SUBTASKS -->
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                        <a class="nav-link" href="{% url 'task_list' %}"><i class="fas fa-list"></i> Tasks</a>
-                        <a class="nav-link" href="{% url 'category_list' %}"><i class="fas fa-tags"></i> Categories</a>
-                        <a class="nav-link" href="{% url 'priority_list' %}"><i class="fas fa-flag"></i> Priorities</a>
-                        <a class="nav-link" href="{% url 'subtask_list' %}"><i class="fas fa-tasks"></i> SubTasks</a>
-                        <a class="nav-link" href="{% url 'note_list' %}"><i class="fas fa-sticky-note"></i> Notes</a>
+                        <div class="sb-sidenav-menu-heading px-3 py-3 fw-semibold">📋 Core</div>
+                        
+                        <a class="nav-link{% if request.resolver_match.url_name == 'dashboard' %} active{% endif %}" href="{% url 'dashboard' %}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Dashboard
+                        </a>
+                        
+                        <a class="nav-link{% if request.resolver_match.url_name == 'task_list' %} active{% endif %}" href="{% url 'task_list' %}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-list-check"></i></div> Tasks
+                        </a>
+                        
+                        <a class="nav-link{% if request.resolver_match.url_name == 'subtask_list' %} active{% endif %}" href="{% url 'subtask_list' %}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tasks"></i></div> Subtasks
+                        </a>
+                        
+                        <a class="nav-link{% if request.resolver_match.url_name == 'category_list' %} active{% endif %}" href="{% url 'category_list' %}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tags"></i></div> Categories
+                        </a>
+                        
+                        <a class="nav-link{% if request.resolver_match.url_name == 'priority_list' %} active{% endif %}" href="{% url 'priority_list' %}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-flag"></i></div> Priorities
+                        </a>
+                        
+                        <a class="nav-link{% if request.resolver_match.url_name == 'note_list' %} active{% endif %}" href="{% url 'note_list' %}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-sticky-note"></i></div> Notes
+                        </a>
                     </div>
+                </div>
+                <div class="sb-sidenav-footer p-4 border-top">
+                    <div class="small text-muted mb-2">Logged in as:</div>
+                    <div class="fw-bold">{{ user.email|default:user.username }}</div>
                 </div>
             </nav>
         </div>
 
+        <!-- MAIN CONTENT -->
         <div id="layoutSidenav_content">
-            <main class="container-fluid px-4 mt-4">
-                {% block content %}{% endblock %}
+            <main>
+                <div class="container-fluid px-4 mt-5">
+                    {% block content %}
+                    <!-- SQUARE STAT CARDS -->
+                    <div class="summary-grid">
+                        <div class="animate-fade">
+                            <div class="stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <div>
+                                            <h3>{{ total_tasks|default:0 }}</h3>
+                                            <p>Total Tasks</p>
+                                        </div>
+                                        <i class="fas fa-tasks fa-2x"></i>
+                                    </div>
+                                </div>
+                                <a href="{% url 'task_list' %}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                        
+                        <div class="animate-fade" style="animation-delay: 0.1s;">
+                            <div class="stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <div>
+                                            <h3>{{ pending_tasks|default:0 }}</h3>
+                                            <p>Pending</p>
+                                        </div>
+                                        <i class="fas fa-clock fa-2x"></i>
+                                    </div>
+                                </div>
+                                <a href="{% url 'task_list' %}?status=Pending" class="stretched-link"></a>
+                            </div>
+                        </div>
+                        
+                        <div class="animate-fade" style="animation-delay: 0.2s;">
+                            <div class="stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <div>
+                                            <h3>{{ completed_tasks|default:0 }}</h3>
+                                            <p>Completed</p>
+                                        </div>
+                                        <i class="fas fa-check-circle fa-2x"></i>
+                                    </div>
+                                </div>
+                                <a href="{% url 'task_list' %}?status=Completed" class="stretched-link"></a>
+                            </div>
+                        </div>
+                        
+                        <div class="animate-fade" style="animation-delay: 0.3s;">
+                            <div class="stat-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <div>
+                                            <h3>{{ total_notes|default:0 }}</h3>
+                                            <p>Notes</p>
+                                        </div>
+                                        <i class="fas fa-sticky-note fa-2x"></i>
+                                    </div>
+                                </div>
+                                <a href="{% url 'note_list' %}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TASKS SECTION -->
+                    <div class="glass-card mb-5 animate-fade" style="animation-delay: 0.4s;">
+                        <div class="card-header bg-transparent border-0 pb-0">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h4 class="mb-3 fw-bold" style="color: var(--text-primary);">
+                                        <i class="fas fa-list me-2" style="color: var(--primary);"></i>Recent Tasks
+                                    </h4>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <select class="form-select form-select-sm rounded-pill px-4 py-1 shadow-sm" style="width: 180px; background: var(--card-bg); border: 1px solid var(--border);" onchange="sortTable()">
+                                        <option>Sort by Priority</option>
+                                        <option>Due Date</option>
+                                        <option>Status</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body pt-4">
+                            {% block table_content %}
+                            <div class="task-card-grid">
+                                {% for task in recent_tasks %}
+                                <div class="task-item-card">
+                                    <div class="task-priority-badge priority-{{ task.priority|lower }}">{{ task.priority }}</div>
+                                    <div class="task-title">{{ task.title|truncatechars:50 }}</div>
+                                    <div class="task-meta">
+                                        <span class="status-badge status-{{ task.status|lower }}">{{ task.status }}</span>
+                                        <span class="text-muted small"><i class="fas fa-calendar me-1"></i>{{ task.due_date|date:"MMM d" }}</span>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="text-center py-8 text-muted col-span-full">
+                                    <i class="fas fa-tasks fa-4x mb-4 opacity-50"></i>
+                                    <h5 class="mb-3">No tasks yet</h5>
+                                    <p class="mb-0">Create your first task to get started!</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                    {% endblock %}
+                </div>
             </main>
-            <footer class="py-4 bg-light mt-auto">
+
+            <!-- FOOTER -->
+            <footer class="py-4 bg-light mt-auto border-top">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Hangarin 2026</div>
+                        <div class="text-muted">
+                            <i class="fas fa-heart text-primary me-1"></i>
+                            Copyright © Hangarin 2026
+                        </div>
+                        <div class="text-muted">
+                            <a href="#" class="text-decoration-none me-3">Privacy</a>
+                            <a href="#" class="text-decoration-none">Terms</a>
+                        </div>
                     </div>
                 </div>
             </footer>
         </div>
     </div>
 
-    <!-- Local Bootstrap JS -->
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'startbootstrap-sb-admin/dist/js/scripts.js' %}"></script>
+    
+    <script>
+        function sortTable() {
+            console.log('Sorting tasks...');
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.animate-fade').forEach((el, i) => {
+                el.style.animationDelay = `${i * 0.12}s`;
+            });
+        });
+    </script>
 </body>
 </html>
