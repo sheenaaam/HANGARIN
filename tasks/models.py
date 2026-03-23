@@ -1,16 +1,24 @@
 from django.db import models
 
-# Category model
+# Category model - FIXED GRAMMAR ✅
 class Category(models.Model):
     name = models.CharField(max_length=50)
-
+    
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"  # Fixed "Categorys" → "Categories"
+    
     def __str__(self):
         return self.name
 
-# Priority model
+# Priority model - FIXED GRAMMAR ✅
 class Priority(models.Model):
     name = models.CharField(max_length=50)
-
+    
+    class Meta:
+        verbose_name = "Priority" 
+        verbose_name_plural = "Priorities"  # Fixed "Prioritys" → "Priorities"
+    
     def __str__(self):
         return self.name
 
