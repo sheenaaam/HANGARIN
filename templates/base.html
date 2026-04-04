@@ -1,4 +1,5 @@
 {% load static %}
+{% load pwa %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +9,11 @@
 
     <link href="{% static 'startbootstrap-sb-admin/dist/css/styles.css' %}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    
+    {% progressive_web_app_meta %}
     <style>
         :root {
             --primary: #8b5cf6;
@@ -25,7 +26,7 @@
             --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
-        body { 
+        body {
             font-family: 'Inter', sans-serif !important;
             background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
         }
@@ -205,15 +206,15 @@
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button>
-        
+
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" method="get">
             <div class="input-group input-group-sm">
-                <input class="form-control" type="text" placeholder="🔍 Search tasks..." 
+                <input class="form-control" type="text" placeholder="🔍 Search tasks..."
                        name="q" value="{{ request.GET.q|default:'' }}" />
                 <button class="btn btn-light px-3" type="submit"><i class="fas fa-search"></i></button>
             </div>
         </form>
-        
+
         <ul class="navbar-nav ms-auto ms-md-0 me-3">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
@@ -236,27 +237,27 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading px-3 py-3 fw-semibold">📋 Core</div>
-                        
+
                         <a class="nav-link{% if request.resolver_match.url_name == 'dashboard' %} active{% endif %}" href="{% url 'dashboard' %}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div> Dashboard
                         </a>
-                        
+
                         <a class="nav-link{% if request.resolver_match.url_name == 'task_list' %} active{% endif %}" href="{% url 'task_list' %}">
                             <div class="sb-nav-link-icon"><i class="fas fa-list-check"></i></div> Tasks
                         </a>
-                        
+
                         <a class="nav-link{% if request.resolver_match.url_name == 'subtask_list' %} active{% endif %}" href="{% url 'subtask_list' %}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tasks"></i></div> Subtasks
                         </a>
-                        
+
                         <a class="nav-link{% if request.resolver_match.url_name == 'category_list' %} active{% endif %}" href="{% url 'category_list' %}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tags"></i></div> Categories
                         </a>
-                        
+
                         <a class="nav-link{% if request.resolver_match.url_name == 'priority_list' %} active{% endif %}" href="{% url 'priority_list' %}">
                             <div class="sb-nav-link-icon"><i class="fas fa-flag"></i></div> Priorities
                         </a>
-                        
+
                         <a class="nav-link{% if request.resolver_match.url_name == 'note_list' %} active{% endif %}" href="{% url 'note_list' %}">
                             <div class="sb-nav-link-icon"><i class="fas fa-sticky-note"></i></div> Notes
                         </a>
@@ -289,7 +290,7 @@
                                 <a href="{% url 'task_list' %}" class="stretched-link"></a>
                             </div>
                         </div>
-                        
+
                         <div class="animate-fade" style="animation-delay: 0.1s;">
                             <div class="stat-card">
                                 <div class="card-body">
@@ -304,7 +305,7 @@
                                 <a href="{% url 'task_list' %}?status=Pending" class="stretched-link"></a>
                             </div>
                         </div>
-                        
+
                         <div class="animate-fade" style="animation-delay: 0.2s;">
                             <div class="stat-card">
                                 <div class="card-body">
@@ -319,7 +320,7 @@
                                 <a href="{% url 'task_list' %}?status=Completed" class="stretched-link"></a>
                             </div>
                         </div>
-                        
+
                         <div class="animate-fade" style="animation-delay: 0.3s;">
                             <div class="stat-card">
                                 <div class="card-body">
@@ -348,7 +349,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="card-body pt-4">
                             {% block table_content %}
                             <div class="task-card-grid">
@@ -395,7 +396,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'startbootstrap-sb-admin/dist/js/scripts.js' %}"></script>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.animate-fade').forEach((el, i) => {

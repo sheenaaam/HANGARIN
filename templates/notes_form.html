@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Delete SubTask</h2>
-<p>Are you sure you want to delete the subtask "<strong>{{ subtask.title }}</strong>" of task "<strong>{{ subtask.parent_task.title }}</strong>"?</p>
+<h2>{% if object %}Edit{% else %}Add{% endif %} Note</h2>
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Yes, delete</button>
-    <a href="{% url 'subtask_list' %}" class="btn btn-secondary">Cancel</a>
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">{% if object %}Update{% else %}Create{% endif %}</button>
+    <a href="{% url 'note_list' %}" class="btn btn-secondary">Cancel</a>
 </form>
 {% endblock %}
