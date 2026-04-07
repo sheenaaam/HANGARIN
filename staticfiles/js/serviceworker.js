@@ -1,10 +1,11 @@
 self.addEventListener('install', function(e) {
 e.waitUntil(
-caches.open('projectsite-cache-v1').then(function(cache) {
+caches.open('hangarin-cache-v1').then(function(cache) {
 return cache.addAll([
 '/',
-'/static/css/bootstrap.min.css',
-'/static/js/main.js',
+'/static/css/styles.css',
+'/static/js/scripts.js',
+'/static/js/datatable-simple-demo,js'
 ]);
 })
 );
