@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy
 from .models import Task, SubTask, Category, Priority, Note
